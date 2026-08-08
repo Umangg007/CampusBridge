@@ -13,7 +13,7 @@ export const ParentSquareFeed = () => {
   const [commentText, setCommentText] = useState({});
   const [commentsMap, setCommentsMap] = useState({});
 
-  // New Post Form State
+  // Form State
   const [postTitle, setPostTitle] = useState('');
   const [postContent, setPostContent] = useState('');
   const [postCategory, setPostCategory] = useState('ACADEMIC');
@@ -43,8 +43,7 @@ export const ParentSquareFeed = () => {
         isPinned: true
       });
       setShowCreateModal(false);
-      setPostTitle('');
-      setPostContent('');
+      setPostTitle(''); setPostContent('');
       loadFeed();
     } catch (err) {
       console.error('Error creating post:', err);
@@ -71,63 +70,64 @@ export const ParentSquareFeed = () => {
   };
 
   return (
-    <div className="space-y-6">
-      {/* ParentSquare Official Marketing Hero Banner */}
-      <div className="ps-card p-8 bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white border-none shadow-xl relative overflow-hidden">
+    <div className="ps-content-wrap">
+      
+      {/* 1. ParentSquare Hero Banner */}
+      <div className="ps-hero-card">
         
-        {/* Floating Tag Pills from ParentSquare */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          <span className="ps-tag-pill bg-purple-500/20 text-purple-300 border border-purple-400/30">
-            <Sparkles className="w-3.5 h-3.5" /> Intelligence
+        {/* Floating Tag Pills with Pastel Backgrounds */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '16px' }}>
+          <span className="ps-hero-pill" style={{ backgroundColor: '#F3E8FF', color: '#7E22CE' }}>
+            <Sparkles size={14} /> Intelligence
           </span>
-          <span className="ps-tag-pill bg-sky-500/20 text-sky-300 border border-sky-400/30">
-            <Globe className="w-3.5 h-3.5" /> Websites
+          <span className="ps-hero-pill" style={{ backgroundColor: '#E0F2FE', color: '#0369A1' }}>
+            <Globe size={14} /> Websites
           </span>
-          <span className="ps-tag-pill bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
-            <MessageSquare className="w-3.5 h-3.5" /> Communication
+          <span className="ps-hero-pill" style={{ backgroundColor: '#D1FAE5', color: '#047857' }}>
+            <MessageSquare size={14} /> Communication
           </span>
-          <span className="ps-tag-pill bg-pink-500/20 text-pink-300 border border-pink-400/30">
-            <HeartHandshake className="w-3.5 h-3.5" /> Engagement
+          <span className="ps-hero-pill" style={{ backgroundColor: '#FCE7F3', color: '#BE185D' }}>
+            <HeartHandshake size={14} /> Engagement
           </span>
         </div>
 
-        {/* Hero Title & Subtitle */}
-        <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight max-w-3xl mb-3">
+        {/* Hero Headline & Subtitle */}
+        <h2 style={{ fontSize: '28px', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '8px', lineHeight: 1.25 }}>
           The K-12 family engagement platform built to reach every family
         </h2>
-        <p className="text-slate-300 text-sm max-w-2xl leading-relaxed mb-6 font-medium">
+        <p style={{ fontSize: '14px', color: '#94A3B8', maxWidth: '640px', lineHeight: 1.6, marginBottom: '24px' }}>
           One unified platform for communication, websites, attendance, and payments—built to reach every family, without barriers.
         </p>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap items-center gap-4">
-          <button className="ps-btn-green text-sm bg-emerald-600 hover:bg-emerald-500">
-            Explore the platform <ArrowRight className="w-4 h-4" />
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '14px' }}>
+          <button className="ps-btn-primary" style={{ fontSize: '13px' }}>
+            Explore the platform <ArrowRight size={16} />
           </button>
-          <button className="ps-btn-outline text-sm bg-white/10 text-white border-white/20 hover:bg-white/20">
+          <button style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#FFFFFF', border: '1px solid rgba(255,255,255,0.2)', padding: '10px 20px', borderRadius: '20px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>
             Get a demo
           </button>
           {(user?.role === 'ADMIN' || user?.role === 'TEACHER') && (
-            <button onClick={() => setShowCreateModal(true)} className="ps-btn-primary ml-auto text-xs bg-emerald-500 text-white">
-              <Plus className="w-4 h-4" /> Broadcast Announcement
+            <button onClick={() => setShowCreateModal(true)} className="ps-btn-primary" style={{ marginLeft: 'auto', backgroundColor: '#10B981' }}>
+              <Plus size={16} /> Broadcast Announcement
             </button>
           )}
         </div>
 
       </div>
 
-      {/* Feed Posts List Header */}
-      <div className="flex items-center justify-between px-1">
-        <h3 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
-          <Megaphone className="w-5 h-5 text-emerald-700" /> Recent District & Class Announcements
+      {/* 2. Feed Header Title */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 4px' }}>
+        <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Megaphone size={20} style={{ color: '#00A884' }} /> Recent District & Class Announcements
         </h3>
-        <span className="text-xs text-slate-500 font-semibold">{announcements.length} Posts Active</span>
+        <span style={{ fontSize: '12px', color: '#64748B', fontWeight: 600 }}>{announcements.length} Posts Active</span>
       </div>
 
-      {/* Feed Posts List */}
-      <div className="space-y-4">
+      {/* 3. Feed Posts Cards */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         {announcements.length === 0 ? (
-          <div className="ps-card p-12 text-center text-slate-400 text-sm italic">
+          <div className="ps-card-box" style={{ textAlign: 'center', padding: '48px', color: '#94A3B8', fontSize: '14px', fontStyle: 'italic' }}>
             No announcements currently in school feed.
           </div>
         ) : (
@@ -136,98 +136,110 @@ export const ParentSquareFeed = () => {
             const postComments = commentsMap[post._id] || [];
 
             return (
-              <div key={post._id} className="ps-card p-6 space-y-4">
+              <div key={post._id} className="ps-card-box" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 
-                {/* Post Author Header */}
-                <div className="flex items-start justify-between gap-4 pb-3 border-b border-slate-100">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-emerald-700 text-white font-bold flex items-center justify-center text-sm shadow-sm">
+                {/* Author Header */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', paddingBottom: '14px', borderBottom: '1px solid #F1F5F9' }}>
+                  
+                  {/* Left: Avatar & Name */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ width: '42px', height: '42px', borderRadius: '50%', backgroundColor: '#00A884', color: '#FFFFFF', fontWeight: 800, fontSize: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0, 168, 132, 0.25)' }}>
                       {post.authorName.charAt(0)}
                     </div>
                     <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-slate-900 text-sm">{post.authorName}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontWeight: 800, fontSize: '15px', color: '#0F172A' }}>{post.authorName}</span>
                         <span className="badge badge-academic">{post.authorRole}</span>
                       </div>
-                      <div className="text-[11px] text-slate-400 font-medium">
-                        Target Audience: <span className="font-semibold text-slate-700">{post.targetAudience || 'Greenwood High Parents'}</span> • {new Date(post.createdAt).toLocaleDateString()}
+                      <div style={{ fontSize: '12px', color: '#64748B', fontWeight: 500, marginTop: '2px' }}>
+                        Target Audience: <span style={{ fontWeight: 700, color: '#334155' }}>{post.targetAudience || 'Greenwood High Parents'}</span> • {new Date(post.createdAt).toLocaleDateString()}
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  {/* Right: Badges */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     {post.isPinned && (
-                      <span className="text-xs bg-amber-50 text-amber-800 font-bold px-2.5 py-1 rounded-full border border-amber-200 flex items-center gap-1">
-                        <Pin className="w-3.5 h-3.5 text-amber-600" /> Pinned
+                      <span style={{ backgroundColor: '#FEF3C7', color: '#92400E', fontWeight: 700, fontSize: '11px', padding: '4px 10px', borderRadius: '12px', border: '1px solid #FDE68A', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <Pin size={12} style={{ color: '#D97706' }} /> Pinned
                       </span>
                     )}
                     <span className={`badge badge-${post.category.toLowerCase()}`}>{post.category}</span>
                   </div>
+
                 </div>
 
-                {/* Post Title & Content */}
-                <div className="space-y-2">
-                  <h3 className="text-lg font-bold text-slate-900 leading-snug">{post.title}</h3>
-                  <p className="text-slate-700 text-sm leading-relaxed whitespace-pre-line">{post.content}</p>
+                {/* Post Content */}
+                <div>
+                  <h4 style={{ fontSize: '17px', fontWeight: 800, color: '#0F172A', marginBottom: '8px', lineHeight: 1.3 }}>
+                    {post.title}
+                  </h4>
+                  <p style={{ fontSize: '14px', color: '#334155', lineHeight: 1.6, whiteSpace: 'pre-line' }}>
+                    {post.content}
+                  </p>
                 </div>
 
-                {/* Inline Comments List */}
+                {/* Comments List */}
                 {postComments.length > 0 && (
-                  <div className="space-y-2 pt-2 border-t border-slate-100">
-                    <div className="text-[11px] font-bold text-slate-400 uppercase">Comments ({postComments.length})</div>
+                  <div style={{ paddingTop: '12px', borderTop: '1px solid #F1F5F9', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div style={{ fontSize: '11px', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase' }}>
+                      Comments ({postComments.length})
+                    </div>
                     {postComments.map((c, idx) => (
-                      <div key={idx} className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs space-y-1">
-                        <div className="flex justify-between font-bold text-slate-800">
+                      <div key={idx} style={{ backgroundColor: '#F8FAFC', padding: '10px 14px', borderRadius: '12px', border: '1px solid #E2E8F0', fontSize: '12px' }}>
+                        <div style={{ display: 'flex', justifyBetween: 'space-between', fontWeight: 700, color: '#0F172A', marginBottom: '4px' }}>
                           <span>{c.author}</span>
-                          <span className="text-[10px] text-slate-400">{c.time}</span>
+                          <span style={{ fontSize: '10px', color: '#94A3B8' }}>{c.time}</span>
                         </div>
-                        <div className="text-slate-600">{c.text}</div>
+                        <div style={{ color: '#475569' }}>{c.text}</div>
                       </div>
                     ))}
                   </div>
                 )}
 
-                {/* Reaction Bar (ParentSquare Signature ❤️ Appreciate) */}
-                <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-semibold">
-                  <div className="flex items-center gap-4">
+                {/* Reaction Bar */}
+                <div style={{ paddingTop: '12px', borderTop: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    
                     <button
                       onClick={() => handleAppreciate(post._id)}
-                      className={`flex items-center gap-1.5 transition-all ${
-                        isLiked ? 'text-rose-600 font-bold' : 'hover:text-rose-600'
-                      }`}
+                      className={`ps-reaction-btn ${isLiked ? 'ps-reaction-btn-liked' : ''}`}
                     >
-                      <Heart className={`w-4 h-4 ${isLiked ? 'fill-rose-500 text-rose-500' : ''}`} />
+                      <Heart size={15} style={{ color: isLiked ? '#E11D48' : '#64748B', fill: isLiked ? '#E11D48' : 'none' }} />
                       <span>Appreciate ({(post.reactions?.like || 0) + (reactions[post._id] || 0)})</span>
                     </button>
+
                     <button
                       onClick={() => setActiveCommentId(activeCommentId === post._id ? null : post._id)}
-                      className="flex items-center gap-1.5 hover:text-emerald-700 transition-colors"
+                      className="ps-reaction-btn"
                     >
-                      <MessageCircle className="w-4 h-4 text-emerald-700" />
+                      <MessageCircle size={15} style={{ color: '#00A884' }} />
                       <span>Reply / Comment</span>
                     </button>
+
                   </div>
 
-                  <button className="flex items-center gap-1 hover:text-slate-800">
-                    <Share2 className="w-3.5 h-3.5" /> Share
+                  <button className="ps-reaction-btn">
+                    <Share2 size={14} /> Share
                   </button>
                 </div>
 
-                {/* Expandable Comment Input */}
+                {/* Comment Input */}
                 {activeCommentId === post._id && (
-                  <div className="pt-3 border-t border-slate-100 flex gap-2">
+                  <div style={{ paddingTop: '12px', borderTop: '1px solid #F1F5F9', display: 'flex', gap: '8px' }}>
                     <input
                       type="text"
                       value={commentText[post._id] || ''}
                       onChange={(e) => setCommentText({ ...commentText, [post._id]: e.target.value })}
                       placeholder="Write your comment to post..."
-                      className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      style={{ flex: 1 }}
                     />
                     <button
                       onClick={() => handleAddComment(post._id)}
-                      className="ps-btn-green px-3 py-1.5 text-xs"
+                      className="ps-btn-primary"
+                      style={{ padding: '8px 16px', fontSize: '12px' }}
                     >
-                      <Send className="w-3.5 h-3.5" /> Post
+                      <Send size={14} /> Post
                     </button>
                   </div>
                 )}
@@ -240,33 +252,31 @@ export const ParentSquareFeed = () => {
 
       {/* New Post Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="ps-card p-6 max-w-lg w-full space-y-4">
-            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-              <h3 className="font-extrabold text-slate-900 text-lg">Create New ParentSquare Post</h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-slate-700">✕</button>
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(15, 23, 42, 0.5)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', zIndex: 200 }}>
+          <div className="ps-card-box" style={{ maxWidth: '500px', width: '100%', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #F1F5F9', paddingBottom: '12px' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0F172A' }}>Create New ParentSquare Post</h3>
+              <button onClick={() => setShowCreateModal(false)} style={{ fontSize: '18px', color: '#94A3B8', fontWeight: 700 }}>✕</button>
             </div>
 
-            <form onSubmit={handleCreatePost} className="space-y-4">
+            <form onSubmit={handleCreatePost} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
-                <label className="block text-xs font-bold text-slate-600 mb-1">Post Title</label>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#475569', marginBottom: '4px' }}>Post Title</label>
                 <input
                   type="text"
                   required
                   value={postTitle}
                   onChange={(e) => setPostTitle(e.target.value)}
                   placeholder="e.g. Science Fair Registration & Schedule"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
-                  <label className="block text-xs font-bold text-slate-600 mb-1">Category</label>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#475569', marginBottom: '4px' }}>Category</label>
                   <select
                     value={postCategory}
                     onChange={(e) => setPostCategory(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800"
                   >
                     <option value="ACADEMIC">ACADEMIC</option>
                     <option value="URGENT">URGENT</option>
@@ -275,11 +285,10 @@ export const ParentSquareFeed = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-600 mb-1">Target Audience</label>
+                  <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#475569', marginBottom: '4px' }}>Target Audience</label>
                   <select
                     value={postTarget}
                     onChange={(e) => setPostTarget(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800"
                   >
                     <option value="ALL">ALL PARENTS & STUDENTS</option>
                     <option value="PARENTS">PARENTS ONLY</option>
@@ -289,19 +298,18 @@ export const ParentSquareFeed = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-600 mb-1">Post Description</label>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#475569', marginBottom: '4px' }}>Post Description</label>
                 <textarea
                   required
                   rows={4}
                   value={postContent}
                   onChange={(e) => setPostContent(e.target.value)}
                   placeholder="Share announcements, event details, or instructions..."
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </div>
 
-              <button type="submit" className="ps-btn-green w-full">
-                <Send className="w-4 h-4" /> Broadcast Announcement to School Feed
+              <button type="submit" className="ps-btn-primary" style={{ width: '100%' }}>
+                <Send size={16} /> Broadcast Announcement
               </button>
             </form>
           </div>
