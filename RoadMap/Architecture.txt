@@ -1,0 +1,14 @@
+                 Users
+                   │
+        React + Tailwind CSS
+          (Presentation Layer)
+                   │
+              REST API
+                   │
+      Node.js + Express.js
+        (Business Logic Layer)
+                   │
+              Mongoose ODM
+                   │
+              MongoDB Atlas
+             (Data Layer)

@@ -1,0 +1,17 @@
+| Day | Goal                            | Status |
+| --- | ------------------------------- | ------ |
+| 1   | Requirement Analysis + Research | ⏳      |
+| 2   | SRS + BRD + Feature List        | ⏳      |
+| 3   | UI/UX + Wireframes              | ⏳      |
+| 4   | Database + API Design           | ⏳      |
+| 5   | Authentication                  | ⏳      |
+| 6   | Admin Panel                     | ⏳      |
+| 7   | Teacher Module                  | ⏳      |
+| 8   | Parent Module                   | ⏳      |
+| 9   | Student Module                  | ⏳      |
+| 10  | Chat + Notifications            | ⏳      |
+| 11  | Dashboard + Analytics           | ⏳      |
+| 12  | Testing + Bug Fixes             | ⏳      |
+| 13  | Deployment                      | ⏳      |
+| 14  | Documentation                   | ⏳      |
+| 15  | PPT + Viva + Final Review       | ⏳      |
