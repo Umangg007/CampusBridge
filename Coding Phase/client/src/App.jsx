@@ -14,19 +14,19 @@ const MainContent = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-teal-600"></div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '50vh' }}>
+        <div style={{ width: '32px', height: '32px', border: '3px solid #E2E8F0', borderTopColor: '#00A884', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
-      {/* Left Sidebar Menu */}
+    <div className="ps-app-container">
+      {/* Left Sidebar */}
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} role={user?.role} />
 
-      {/* Main Content Area */}
-      <main className="flex-1 space-y-6">
+      {/* Main Content Body */}
+      <main className="ps-content-body">
         {activeTab === 'feed' && <ParentSquareFeed />}
         {activeTab === 'admin' && <AdminDashboard />}
         {activeTab === 'homework' && (
@@ -50,7 +50,7 @@ const MainContent = () => {
 export function App() {
   return (
     <AuthProvider>
-      <div className="min-h-screen bg-[#F1F5F9] text-slate-900">
+      <div style={{ minHeight: '100vh', backgroundColor: '#F8FAFC' }}>
         <Header />
         <MainContent />
       </div>
