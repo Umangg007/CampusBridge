@@ -5,6 +5,7 @@ import { AdminDashboard } from './components/AdminDashboard';
 import { TeacherDashboard } from './components/TeacherDashboard';
 import { ParentDashboard } from './components/ParentDashboard';
 import { StudentDashboard } from './components/StudentDashboard';
+import { ThreeBackground } from './components/ThreeBackground';
 
 const MainContent = () => {
   const { user, loading } = useAuth();
@@ -18,7 +19,7 @@ const MainContent = () => {
   }
 
   return (
-    <main className="container mx-auto px-4 pb-12">
+    <main className="container mx-auto px-4 pb-16">
       {user?.role === 'ADMIN' && <AdminDashboard />}
       {user?.role === 'TEACHER' && <TeacherDashboard />}
       {user?.role === 'PARENT' && <ParentDashboard />}
@@ -30,7 +31,8 @@ const MainContent = () => {
 export function App() {
   return (
     <AuthProvider>
-      <div className="min-h-screen bg-[#0B0F19] text-slate-100 p-4">
+      <ThreeBackground />
+      <div className="min-h-screen p-4 md:p-8">
         <div className="max-w-7xl mx-auto">
           <Header />
           <MainContent />
