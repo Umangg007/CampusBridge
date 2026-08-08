@@ -67,4 +67,19 @@ export const sendMessage = async (payload) => {
   return res.data;
 };
 
+export const fetchMeetings = async () => {
+  const res = await api.get('/meetings');
+  return res.data;
+};
+
+export const createMeeting = async (payload) => {
+  const res = await api.post('/meetings', payload);
+  return res.data;
+};
+
+export const bookMeetingSlot = async (meetingId, slotIndex) => {
+  const res = await api.post('/meetings/book', { meetingId, slotIndex });
+  return res.data;
+};
+
 export default api;

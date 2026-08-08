@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { User, CheckCircle, BookOpen, Megaphone, MessageSquare, Send } from 'lucide-react';
-import { fetchAnnouncements, fetchHomework, fetchStudentAttendance, sendMessage, fetchMessages } from '../services/api';
+import { User, CheckCircle, BookOpen, Megaphone, MessageSquare, Send, Video, ExternalLink, Calendar } from 'lucide-react';
+import { fetchAnnouncements, fetchHomework, fetchStudentAttendance, sendMessage, fetchMessages, fetchMeetings, bookMeetingSlot } from '../services/api';
 
 export const ParentDashboard = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [homeworkList, setHomeworkList] = useState([]);
   const [attendanceStats, setAttendanceStats] = useState(null);
+  const [meetings, setMeetings] = useState([]);
 
   // Chat State
   const [chatOpen, setChatOpen] = useState(false);
@@ -26,8 +27,20 @@ export const ParentDashboard = () => {
 
       const attRes = await fetchStudentAttendance(4);
       setAttendanceStats(attRes.stats || { percentage: '100', present: 1, absent: 0, total: 1 });
+
+      const meetRes = await fetchMeetings();
+      setMeetings(meetRes.data || []);
     } catch (err) {
       console.warn('Error loading parent data:', err);
+    }
+  };
+
+  const handleBookSlot = async (meetingId, slotIndex) => {
+    try {
+      await bookMeetingSlot(meetingId, slotIndex);
+      loadParentData();
+    } catch (err) {
+      console.error('Error booking slot:', err);
     }
   };
 
@@ -82,6 +95,62 @@ export const ParentDashboard = () => {
           <button onClick={openChatWithTeacher} className="btn-primary bg-cyan-600 hover:bg-cyan-500">
             <MessageSquare className="w-4 h-4" /> Message Teacher
           </button>
+        </div>
+      </div>
+
+      {/* Virtual Parent-Teacher Conferences & Video Calls Section */}
+      <div className="glass-card p-6 space-y-4 border-t-2 border-t-purple-500">
+        <h3 className="text-lg font-bold text-white flex items-center gap-2">
+          <Video className="w-5 h-5 text-purple-400" /> Virtual Parent-Teacher Conferences & Video Calls
+        </h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {meetings.length === 0 ? (
+            <p className="text-slate-400 text-sm italic">No conference sessions scheduled by teacher.</p>
+          ) : (
+            meetings.map((m) => (
+              <div key={m._id} className="p-4 bg-slate-900/60 rounded-xl border border-glass space-y-3">
+                <div className="flex justify-between items-center">
+                  <h4 className="font-bold text-white text-base">{m.title}</h4>
+                  <span className="badge badge-academic">{m.status}</span>
+                </div>
+                <p className="text-slate-300 text-xs">{m.description}</p>
+                
+                {/* Time Slot Booking Picker */}
+                <div className="space-y-1.5 pt-2 border-t border-glass">
+                  <div className="text-[11px] font-semibold text-slate-400">Available Conference Slots:</div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {m.slots?.map((slot, idx) => (
+                      <button
+                        key={idx}
+                        disabled={slot.status === 'BOOKED'}
+                        onClick={() => handleBookSlot(m._id, idx)}
+                        className={`p-2 rounded-lg text-xs font-semibold flex items-center justify-between border ${
+                          slot.status === 'BOOKED'
+                            ? slot.parentId === 3
+                              ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
+                              : 'bg-slate-800/40 border-slate-800 text-slate-500 cursor-not-allowed'
+                            : 'bg-indigo-600/20 border-indigo-500/40 text-indigo-200 hover:bg-indigo-600'
+                        }`}
+                      >
+                        <span>{slot.slotTime}</span>
+                        <span>{slot.status === 'BOOKED' ? (slot.parentId === 3 ? 'RESERVED' : 'TAKEN') : 'BOOK'}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <a
+                  href={m.meetingUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-primary w-full bg-purple-600 hover:bg-purple-500 mt-2 text-xs"
+                >
+                  <ExternalLink className="w-4 h-4" /> Join Video Call Room Now
+                </a>
+              </div>
+            ))
+          )}
         </div>
       </div>
 

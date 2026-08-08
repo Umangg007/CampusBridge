@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { BookOpen, Megaphone, CheckSquare, Plus, Send } from 'lucide-react';
-import { createHomework, createAnnouncement, markAttendance } from '../services/api';
+import React, { useState, useEffect } from 'react';
+import { BookOpen, Megaphone, CheckSquare, Video, Plus, Send, ExternalLink } from 'lucide-react';
+import { createHomework, createAnnouncement, markAttendance, createMeeting, fetchMeetings } from '../services/api';
 
 export const TeacherDashboard = () => {
   const [activeTab, setActiveTab] = useState('homework');
@@ -22,6 +22,25 @@ export const TeacherDashboard = () => {
   const [attDate, setAttDate] = useState('2026-08-08');
   const [attStudentStatus, setAttStudentStatus] = useState('PRESENT');
   const [attStatus, setAttStatus] = useState('');
+
+  // Virtual Meetings State
+  const [meetings, setMeetings] = useState([]);
+  const [meetTitle, setMeetTitle] = useState('');
+  const [meetDesc, setMeetDesc] = useState('');
+  const [meetStatusMsg, setMeetStatusMsg] = useState('');
+
+  useEffect(() => {
+    loadMeetings();
+  }, []);
+
+  const loadMeetings = async () => {
+    try {
+      const res = await fetchMeetings();
+      setMeetings(res.data || []);
+    } catch (err) {
+      console.warn('Error loading meetings:', err);
+    }
+  };
 
   const handleCreateHomework = async (e) => {
     e.preventDefault();
@@ -70,6 +89,22 @@ export const TeacherDashboard = () => {
     }
   };
 
+  const handleCreateMeeting = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await createMeeting({
+        title: meetTitle,
+        description: meetDesc,
+        participantRole: 'PARENTS'
+      });
+      setMeetStatusMsg('✅ Parent-Teacher Virtual Conference Scheduled!');
+      setMeetTitle(''); setMeetDesc('');
+      loadMeetings();
+    } catch (err) {
+      setMeetStatusMsg('❌ Error scheduling meeting');
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header Banner */}
@@ -79,7 +114,7 @@ export const TeacherDashboard = () => {
           <h2 className="text-2xl font-bold text-white">Mrs. Priya Patel's Teacher Hub</h2>
           <p className="text-slate-400 text-sm mt-1">Assigned Class: Grade 10-A • Subject: Mathematics</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setActiveTab('homework')}
             className={`btn-secondary text-xs ${activeTab === 'homework' ? 'bg-indigo-600/30 border-indigo-500' : ''}`}
@@ -97,6 +132,12 @@ export const TeacherDashboard = () => {
             className={`btn-secondary text-xs ${activeTab === 'attendance' ? 'bg-emerald-600/30 border-emerald-500' : ''}`}
           >
             <CheckSquare className="w-4 h-4 text-emerald-400" /> Attendance
+          </button>
+          <button
+            onClick={() => setActiveTab('meetings')}
+            className={`btn-secondary text-xs ${activeTab === 'meetings' ? 'bg-purple-600/30 border-purple-500' : ''}`}
+          >
+            <Video className="w-4 h-4 text-purple-400" /> Virtual Meetings
           </button>
         </div>
       </div>
@@ -253,6 +294,77 @@ export const TeacherDashboard = () => {
               <CheckSquare className="w-4 h-4" /> Save Attendance Record
             </button>
           </form>
+        </div>
+      )}
+
+      {/* Tab 4: Virtual Meetings & Conferences */}
+      {activeTab === 'meetings' && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="glass-card p-6">
+            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <Video className="w-5 h-5 text-purple-400" /> Schedule Virtual Conference / Call
+            </h3>
+            {meetStatusMsg && <div className="mb-4 text-sm font-semibold text-emerald-400">{meetStatusMsg}</div>}
+            <form onSubmit={handleCreateMeeting} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-400 mb-1">Conference Topic</label>
+                <input
+                  type="text"
+                  required
+                  value={meetTitle}
+                  onChange={(e) => setMeetTitle(e.target.value)}
+                  placeholder="e.g. Q1 Parent-Teacher Progress Meeting"
+                  className="w-full bg-slate-900/80 border border-glass rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-purple-500"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-400 mb-1">Agenda / Description</label>
+                <textarea
+                  rows={3}
+                  value={meetDesc}
+                  onChange={(e) => setMeetDesc(e.target.value)}
+                  placeholder="Discuss student academic goals and progress..."
+                  className="w-full bg-slate-900/80 border border-glass rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-purple-500"
+                />
+              </div>
+              <button type="submit" className="btn-primary bg-purple-600 hover:bg-purple-500">
+                <Video className="w-4 h-4" /> Schedule Conference & Generate Call Link
+              </button>
+            </form>
+          </div>
+
+          {/* List Scheduled Conferences */}
+          <div className="glass-card p-6 space-y-4">
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <Video className="w-5 h-5 text-purple-400" /> Scheduled Video Conferences
+            </h3>
+            <div className="space-y-3">
+              {meetings.length === 0 ? (
+                <p className="text-slate-400 text-sm italic">No scheduled video meetings.</p>
+              ) : (
+                meetings.map((m) => (
+                  <div key={m._id} className="p-4 bg-slate-900/60 rounded-xl border border-glass space-y-2">
+                    <div className="flex justify-between items-center">
+                      <h4 className="font-bold text-white text-base">{m.title}</h4>
+                      <span className="badge badge-academic">{m.status}</span>
+                    </div>
+                    <p className="text-slate-300 text-xs">{m.description}</p>
+                    <div className="pt-2 border-t border-glass flex justify-between items-center">
+                      <span className="text-[11px] text-slate-400">Host: {m.hostName}</span>
+                      <a
+                        href={m.meetingUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn-secondary text-xs bg-purple-600/30 text-purple-200 hover:bg-purple-600"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" /> Start / Join Video Call
+                      </a>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>
